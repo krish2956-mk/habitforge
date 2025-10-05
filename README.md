@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🎯 HABIT TRACKER - The Most Beautiful Habit Tracker Ever Built
 
 > A jaw-dropping, mind-blowing habit tracker with custom timelines and aesthetic design that will make users say "DAMN, this looks incredible!"
@@ -323,3 +324,6 @@ This habit tracker isn't just an app - it's an experience. Every pixel, every an
 ---
 
 *"The best time to plant a tree was 20 years ago. The second best time is now." - Start your habit journey today!*
+=======
+# habitforge
+>>>>>>> 97e1344bfdbbda9b4f9aaca1a5d70f8110b438a5

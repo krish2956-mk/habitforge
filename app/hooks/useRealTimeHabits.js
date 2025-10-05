@@ -29,7 +29,7 @@ export function useRealTimeHabits() {
       clearInterval(interval);
       window.removeEventListener('focus', handleFocus);
     };
-  }, []);
+  }, [checkForDayChange, loadHabits]);
 
   const loadHabits = useCallback(() => {
     try {

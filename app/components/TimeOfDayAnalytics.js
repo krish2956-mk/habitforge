@@ -174,7 +174,7 @@ export default function TimeOfDayAnalytics({ habits }) {
         <div className="space-y-1 text-sm text-gray-300">
           {bestTimes.length > 0 && (
             <p>
-              You're most productive at <span className="font-semibold text-emerald-400">
+              You&apos;re most productive at <span className="font-semibold text-emerald-400">
                 {bestTimes[0].timeLabel}
               </span> with {bestTimes[0].count} completions.
             </p>

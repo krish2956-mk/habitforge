@@ -19,7 +19,7 @@ export default function DailyStatus({ pendingHabits, completedHabits, onToggleHa
     <div className="bg-white rounded-lg md:rounded-2xl p-5 md:p-8 w-full shadow-sm md:shadow-xl border border-gray-100 mb-4 md:mb-6 hover:shadow-md md:hover:shadow-2xl transition-shadow duration-300 max-w-sm md:max-w-none mx-auto">
       <div className="flex items-center justify-between mb-4 md:mb-6 gap-2">
         <div className="flex-1">
-          <h2 className="text-xs md:text-sm font-bold leading-tight" style={{ color: '#344F1F' }}>Today's Progress</h2>
+          <h2 className="text-xs md:text-sm font-bold leading-tight" style={{ color: '#344F1F' }}>Today&apos;s Progress</h2>
           <p className="text-gray-500 text-xs md:text-sm mt-0.5 md:mt-1 leading-tight">{todayFormatted}</p>
         </div>
         <div className="text-right">
