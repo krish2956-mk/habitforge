@@ -8,6 +8,7 @@ import HabitPerformanceChart from './HabitPerformanceChart';
 export default function AnalyticsDashboard({ habits = [], customIcons = {} }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedHabit, setSelectedHabit] = useState(habits[0]?.id || "");
+  const [failedIcons, setFailedIcons] = useState({});
   
   // Skip if no habits
   if (habits.length === 0) {
@@ -62,22 +63,23 @@ export default function AnalyticsDashboard({ habits = [], customIcons = {} }) {
             }`}
           >
             {tab.icon && (
-              <div className="w-4 h-4 relative">
-                <Image
-                  src={tab.icon}
-                  alt={tab.label}
-                  fill
-                  style={{ objectFit: "contain" }}
-                  onError={(e) => {
-                    // Fallback to emoji if image fails to load
-                    e.target.style.display = "none";
-                    e.target.parentNode.innerHTML = tab.id === "overview" 
-                      ? "📊" 
-                      : tab.id === "performance" 
-                        ? "📈" 
-                        : "";
-                  }}
-                />
+              <div className="w-4 h-4 relative flex items-center justify-center">
+                {failedIcons[tab.id] ? (
+                  <span className="text-base">
+                    {tab.id === "overview" ? "📊" : tab.id === "performance" ? "📈" : ""}
+                  </span>
+                ) : (
+                  <Image
+                    src={tab.icon}
+                    alt={tab.label}
+                    fill
+                    style={{ objectFit: "contain" }}
+                    onError={() => {
+                      // Fallback to emoji if image fails to load
+                      setFailedIcons(prev => ({ ...prev, [tab.id]: true }));
+                    }}
+                  />
+                )}
               </div>
             )}
             <span>{tab.label}</span>

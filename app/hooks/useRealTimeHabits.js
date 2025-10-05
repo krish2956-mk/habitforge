@@ -1,12 +1,55 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { StorageService, DateUtils } from '../lib/storage';
 
 export function useRealTimeHabits() {
   const [habits, setHabits] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [lastUpdateCheck, setLastUpdateCheck] = useState(null);
+  const lastUpdateCheckRef = useRef(null);
+
+  const loadHabits = useCallback((updateTimestamp = true) => {
+    try {
+      setLoading(true);
+      const storedHabits = StorageService.loadHabits();
+      
+      // Update streaks in case of day change
+      const updatedHabits = storedHabits.map(habit => ({
+        ...habit,
+        streak: calculateCurrentStreak(habit.completions || []),
+        todayStatus: getTodayCompletionStatus(habit)
+      }));
+
+      setHabits(updatedHabits);
+      
+      // Only update timestamp when explicitly requested to avoid infinite loops
+      if (updateTimestamp) {
+        lastUpdateCheckRef.current = new Date().toISOString();
+      }
+      
+      // Save updated streaks
+      StorageService.saveHabits(updatedHabits);
+    } catch (error) {
+      console.error('Error loading habits:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const checkForDayChange = useCallback(() => {
+    const now = new Date();
+    
+    // If this is the first check or it's a new day
+    if (!lastUpdateCheckRef.current || 
+        new Date(lastUpdateCheckRef.current).toDateString() !== now.toDateString()) {
+      
+      console.log('Day changed, updating habits...');
+      // Update timestamp
+      lastUpdateCheckRef.current = now.toISOString();
+      // Reload habits without updating timestamp again
+      loadHabits(false);
+    }
+  }, [loadHabits]);
 
   // Load habits on mount and set up real-time updates
   useEffect(() => {
@@ -30,42 +73,6 @@ export function useRealTimeHabits() {
       window.removeEventListener('focus', handleFocus);
     };
   }, [checkForDayChange, loadHabits]);
-
-  const loadHabits = useCallback(() => {
-    try {
-      setLoading(true);
-      const storedHabits = StorageService.loadHabits();
-      
-      // Update streaks in case of day change
-      const updatedHabits = storedHabits.map(habit => ({
-        ...habit,
-        streak: calculateCurrentStreak(habit.completions || []),
-        todayStatus: getTodayCompletionStatus(habit)
-      }));
-
-      setHabits(updatedHabits);
-      setLastUpdateCheck(new Date().toISOString());
-      
-      // Save updated streaks
-      StorageService.saveHabits(updatedHabits);
-    } catch (error) {
-      console.error('Error loading habits:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const checkForDayChange = useCallback(() => {
-    const now = new Date();
-    
-    // If this is the first check or it's a new day
-    if (!lastUpdateCheck || 
-        new Date(lastUpdateCheck).toDateString() !== now.toDateString()) {
-      
-      console.log('Day changed, updating habits...');
-      loadHabits();
-    }
-  }, [lastUpdateCheck, loadHabits]);
 
   const addHabit = useCallback(async (newHabitData) => {
     try {
