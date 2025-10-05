@@ -7,8 +7,8 @@ const poppins = Poppins({
 import "./globals.css";
 
 export const metadata = {
-  title: "Warranty Check",
-  description: "A modern and aesthetic warranty tracking application.",
+  title: "HabitForge - Build Better Habits",
+  description: "A modern and aesthetic habit tracking application to help you build better habits.",
 };
 
 export default function RootLayout({ children }) {
