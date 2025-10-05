@@ -26,7 +26,15 @@ export default function TimeOfDayAnalytics({ habits }) {
     const maxCount = Math.max(...hourCounts);
     
     return hourCounts
-      .map((count, hour) => ({ hour, count, percentage: (count / maxCount) * 100 }))
+      .map((count, hour) => ({ 
+        hour, 
+        count, 
+        percentage: (count / maxCount) * 100,
+        timeLabel: new Date(2000, 0, 1, hour).toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          hour12: true
+        })
+      }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 3);
   };
